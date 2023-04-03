@@ -7,7 +7,8 @@
 (setq initial-scratch-message "")
 (setq inhibit-startup-message t)
 
-(setq frame-title-format "emacs")
+;; Used by xdotool to bring emacs to foreground 
+(setq frame-title-format "one-emacs")
 
 ;; Display the current time
 (display-time-mode 1)
