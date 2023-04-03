@@ -19,6 +19,4 @@
 (use-package slime-company
   :ensure t)
 
-(global-set-key (kbd "C-c s") 'slime)
-
 (provide 'init-slime)
