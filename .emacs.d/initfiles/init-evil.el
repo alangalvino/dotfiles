@@ -1,25 +1,27 @@
 ;;;; Evil configs
 
-;; Config & Hotfixes
-;; Fixes orgmode TAB functionality (see https://stackoverflow.com/questions/22878668/emacs-org-mode-evil-mode-tab-key-not-working)
-;; (setq evil-want-C-i-jump nil)
-
 ;; Packages
 (use-package evil
   :ensure t
   :init
   (setq evil-want-keybinding nil)
+  (evil-set-undo-system 'undo-redo)
   :hook
-  ('slime-repl-mode . (lambda ()
-                        (define-key evil-normal-state-map (kbd "C-r") 'helm-slime-repl-history)
-                        (define-key evil-normal-state-map (kbd "C-m") 'slime-repl-return)
-                        (define-key evil-normal-state-map (kbd "M-.") 'slime-edit-definition)))
+  (('org-mode . (lambda ()
+                  (define-key evil-normal-state-map (kbd "C-<return>") '+org/insert-item-below)
+                  (define-key evil-insert-state-map (kbd "C-<return>") '+org/insert-item-below)
+                  (define-key evil-visual-state-map (kbd "C-<return>") '+org/insert-item-below)
+                  (define-key evil-motion-state-map (kbd "C-<return>") '+org/insert-item-below)))
+   ('slime-repl-mode . (lambda ()
+                         (define-key evil-normal-state-map (kbd "C-r") 'helm-slime-repl-history)
+                         (define-key evil-normal-state-map (kbd "C-m") 'slime-repl-return)
+                         (define-key evil-normal-state-map (kbd "M-.") 'slime-edit-definition))))
   :config
   (evil-mode t)
   
   ;; Repeat search with 'S' and 's'
   (define-key evil-normal-state-map "s" 'evil-search-next)
-  (define-key evil-normal-state-map "S" 'evil-search-backward)
+  (define-key evil-normal-state-map "S" 'evil-search-previous)
 
   ;; to the last non-blank character of a line with 'L' and 'N'
   (define-key evil-motion-state-map "L" 'evil-last-non-blank)
@@ -84,6 +86,8 @@
     "/"   'helm-occur
     ;; t for terminal
     "t"   'vterm-toggle
+    ;; e for editing 
+    "e"   'darkroom-tentative-mode
     ;; d for dired 
     "d"   'treemacs
     ;; s for slime
@@ -99,20 +103,9 @@
 
 (use-package evil-collection
   :after evil
+  :delight
   :ensure t
   :config
   (evil-collection-init))
-
-;; (use-package evil-surround
-;;   :ensure t
-;;   :config
-;;   (global-evil-surround-mode 1))
-
-;; (use-package key-chord
-;;   :ensure t
-;;   :config
-;;   (setq key-chord-two-keys-delay 0.5)
-;;   (key-chord-define evil-insert-state-map "hh" 'evil-normal-state)
-;;   (key-chord-mode 1))
 
 (provide 'init-evil)
