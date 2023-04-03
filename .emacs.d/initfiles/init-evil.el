@@ -55,8 +55,14 @@
   (define-key evil-motion-state-map (kbd "C-h") 'evil-delete-backward-char)
   (define-key evil-visual-state-map (kbd "C-h") 'evil-delete-backward-char)
 
+  ;; Find function definition
+  (define-key evil-insert-state-map (kbd "M-.") 'xref-find-definitions)
+  (define-key evil-motion-state-map (kbd "M-.") 'xref-find-definitions)
+  (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
+  (define-key evil-visual-state-map (kbd "M-.") 'xref-find-definitions)
+
   (define-key evil-normal-state-map "-" 'comment-line)
-  (define-key evil-visual-state-map "-" 'comment-region))
+  (define-key evil-visual-state-map "-" 'comment-or-uncomment-region))
 
 (use-package evil-leader
   :ensure t
@@ -72,11 +78,9 @@
     "f"   'helm-find-file-or-projectile
     "n"   'helm-find-my-notes
     "w"   'helm-find-my-workspace
-    ;; b for buffers
-    "b"   'helm-buffers-list
     ;; g for git
     "g"   'magit-status
-    ;; w for word
+    ;; search word
     "/"   'helm-occur
     ;; t for terminal
     "t"   'vterm-toggle
@@ -84,6 +88,10 @@
     "d"   'treemacs
     ;; s for slime
     "s"   'slime
+    ;; kill buffers
+    "k"   'kill-other-buffers
+    ;; kill server
+    "q"   'server-shutdown
     ;; random
     "F"   'toggle-frame-fullscreen
     "|"   'split-window-horizontally
