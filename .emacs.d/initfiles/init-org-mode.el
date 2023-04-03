@@ -31,7 +31,7 @@
   :custom
   (org-hide-emphasis-markers t))
 
-;;; Org-mode helpers
+;;; Org-mode helpers copied from doomemacs
 
 (defun +org--insert-item (direction)
   (let ((context (org-element-lineage
@@ -125,11 +125,5 @@
   "Inserts a new heading, table cell or item below the current one."
   (interactive "p")
   (dotimes (_ count) (+org--insert-item 'below)))
-
-;;;###autoload
-(defun +org/insert-item-above (count)
-  "Inserts a new heading, table cell or item above the current one."
-  (interactive "p")
-  (dotimes (_ count) (+org--insert-item 'above)))
 
 (provide 'init-org-mode)
