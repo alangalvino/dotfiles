@@ -6,16 +6,12 @@
 ;;; User variables
 
 (defvar user-initfiles-directory      (expand-file-name "initfiles" user-emacs-directory))
-;; (defvar user-local-packages-directory (expand-file-name "local/packages/"  user-emacs-directory))
 (defvar user-orgmode-dir              "~/orgnotes/")
 (defvar user-workspace-dir            "~/workspace/")
 
 ;;; Load initfiles, local-packages and use-package
 
 (setq load-path (cons user-initfiles-directory load-path))
-
-;; (let ((default-directory user-local-packages-directory))
-;;   (normal-top-level-add-subdirs-to-load-path))
 
 (require 'init-use-package)
 
@@ -29,12 +25,6 @@
 
 (use-package init-preferences
   :ensure nil)
-
-(use-package delight 
-  :ensure t)
-
-;; (use-package init-meow
-;;   :ensure nil)
 
 (use-package init-evil
   :ensure nil)
@@ -57,9 +47,7 @@
   (load-theme 'solarized-dark t))
 
 (use-package magit
-  :ensure t
-  :bind
-  ("C-c g" . 'magit-status))
+  :ensure t)
 
 (use-package paredit
   :ensure t
@@ -67,22 +55,21 @@
   :hook
   ('slime-repl-mode . #'paredit-mode)
   ('emacs-lisp-mode . #'paredit-mode)
-  ('lisp-mode . #'paredit-mode))
+  ('lisp-mode       . #'paredit-mode))
 
 (use-package aggressive-indent
   :ensure t
   :delight
   :hook
   ('emacs-lisp-mode . #'aggressive-indent-mode)
-  ('lisp-mode .       #'aggressive-indent-mode))
+  ('org-mode        . #'aggressive-indent-mode)
+  ('lisp-mode       . #'aggressive-indent-mode))
 
 (use-package treemacs 
   :ensure t
   :custom
   (treemacs-no-png-images t)
-  :delight
-  :bind
-  ("C-c d" . 'treemacs))
+  :delight)
 
 (use-package darkroom 
   :ensure t)
@@ -111,14 +98,24 @@
 (use-package helpful
   :ensure t
   :bind
-  ("C-x h f" . 'helpful-callable)
-  ("C-x h v" . 'helpful-variable)
-  ("C-x h k" . 'helpful-key)
-  ("C-x h c" . 'helpful-command)
-  ("C-c C-d" . 'helpful-at-point))
+  (("C-x C-h f" . 'helpful-callable)
+   ("C-x C-h v" . 'helpful-variable)
+   ("C-x C-h k" . 'helpful-key)
+   ("C-x C-h c" . 'helpful-command)
+   ("C-c C-d" . 'helpful-at-point)))
 
 (use-package init-vterm
   :ensure nil)
+
+(use-package delight 
+  :ensure t
+  :config
+  (delight '((abbrev-mode nil t)
+             (eldoc-mode nil t)
+             (lisp-data-mode nil t)
+             (auto-fill-function nil t)
+             (evil-collection-unimpaired-mode nil t)
+             (evil-unimpaired-mode nil t))))
 
 (use-package init-global-keybindings
   :ensure nil)
