@@ -107,6 +107,9 @@
 (use-package init-vterm
   :ensure nil)
 
+(use-package init-doom-modeline
+  :ensure nil)
+
 (use-package delight 
   :ensure t
   :config
