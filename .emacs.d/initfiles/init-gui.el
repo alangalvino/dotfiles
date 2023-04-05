@@ -13,6 +13,9 @@
 ;; Remove load average from display-time
 (setq display-time-default-load-average nil)
 
+;; Remove model line buffer percentage
+(setq mode-line-percent-position nil)
+
 ;; Display the current time
 (display-time-mode 1)
 
