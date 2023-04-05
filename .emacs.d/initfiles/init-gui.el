@@ -10,6 +10,9 @@
 ;; Used by xdotool to bring emacs to foreground 
 (setq frame-title-format "one-emacs")
 
+;; Remove load average from display-time
+(setq display-time-default-load-average nil)
+
 ;; Display the current time
 (display-time-mode 1)
 
