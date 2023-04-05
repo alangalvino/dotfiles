@@ -6,12 +6,14 @@
 ;;; User variables
 
 (defvar user-initfiles-directory      (expand-file-name "initfiles" user-emacs-directory))
+(defvar user-local-packages-directory (expand-file-name "local-packages" user-emacs-directory))
 (defvar user-orgmode-dir              "~/orgnotes/")
 (defvar user-workspace-dir            "~/workspace/")
 
 ;;; Load initfiles, local-packages and use-package
 
 (setq load-path (cons user-initfiles-directory load-path))
+(setq load-path (cons user-local-packages-directory load-path))
 
 (require 'init-use-package)
 
@@ -65,13 +67,13 @@
   ('org-mode        . #'aggressive-indent-mode)
   ('lisp-mode       . #'aggressive-indent-mode))
 
-(use-package treemacs 
+(use-package treemacs
   :ensure t
   :custom
   (treemacs-no-png-images t)
   :delight)
 
-(use-package darkroom 
+(use-package darkroom
   :ensure t)
 
 (use-package company
@@ -80,7 +82,7 @@
   :hook
   ('after-init . 'global-company-mode)
   :config
-  (define-key company-mode-map (kbd "<tab>") 'company-complete))
+  (define-key company-mode-map (kbd "C-<tab>") 'company-indent-or-complete-common))
 
 (use-package which-key
   :ensure t
@@ -110,7 +112,7 @@
 (use-package init-doom-modeline
   :ensure nil)
 
-(use-package delight 
+(use-package delight
   :ensure t
   :config
   (delight '((abbrev-mode nil t)
@@ -119,6 +121,9 @@
              (auto-fill-function nil t)
              (evil-collection-unimpaired-mode nil t)
              (evil-unimpaired-mode nil t))))
+
+(use-package init-auto-save
+  :ensure nil)
 
 (use-package init-global-keybindings
   :ensure nil)
