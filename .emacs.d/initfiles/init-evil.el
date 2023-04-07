@@ -89,7 +89,7 @@
     ;; e for editing 
     "e"   'darkroom-tentative-mode
     ;; d for dired 
-    "d"   'treemacs
+    "d"   'treemacs-display-current-project-exclusively
     ;; s for slime
     "s"   'slime
     ;; kill buffers

@@ -5,8 +5,9 @@
 
 ;;; User variables
 
-(defvar user-initfiles-directory      (expand-file-name "initfiles" user-emacs-directory))
+(defvar user-initfiles-directory      (expand-file-name "initfiles"      user-emacs-directory))
 (defvar user-local-packages-directory (expand-file-name "local-packages" user-emacs-directory))
+(defvar user-helpers-directory        (expand-file-name "helpers" user-emacs-directory))
 (defvar user-orgmode-dir              "~/orgnotes/")
 (defvar user-workspace-dir            "~/workspace/")
 
@@ -15,12 +16,12 @@
 (setq load-path (cons user-initfiles-directory load-path))
 (setq load-path (cons user-local-packages-directory load-path))
 
+;; Load helpers
+(mapc 'load (file-expand-wildcards (concat user-helpers-directory "/*.el")))
+
 (require 'init-use-package)
 
 ;;; Load packages using use-package
-
-(use-package init-helper-functions
-  :ensure nil)
 
 (use-package init-gui
   :ensure nil)
@@ -110,7 +111,7 @@
   :ensure nil)
 
 (use-package init-doom-modeline
-  :ensure nil)
+  ensure nil)
 
 (use-package delight
   :ensure t

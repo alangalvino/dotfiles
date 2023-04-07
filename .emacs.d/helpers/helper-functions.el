@@ -8,5 +8,3 @@
   (interactive)
   (save-some-buffers)
   (kill-emacs))
-
-(provide 'init-helper-functions)
