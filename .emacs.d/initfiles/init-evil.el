@@ -53,7 +53,9 @@
   (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
   (define-key evil-visual-state-map (kbd "M-.") 'xref-find-definitions)
 
-  (define-key evil-visual-state-map "-" 'comment-or-uncomment-region))
+  (define-key evil-normal-state-map "-" 'comment-or-uncomment-region-or-line)
+  (define-key evil-motion-state-map "-" 'comment-or-uncomment-region-or-line)
+  (define-key evil-visual-state-map "-" 'comment-or-uncomment-region-or-line))
 
 (use-package evil-leader
   :ensure t
