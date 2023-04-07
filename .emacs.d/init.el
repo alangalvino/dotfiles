@@ -75,7 +75,9 @@
   :delight)
 
 (use-package darkroom
-  :ensure t)
+  :ensure t
+  :config
+  (setq darkroom-margins 0.02))
 
 (use-package company
   :ensure t
@@ -105,7 +107,7 @@
    ("C-x C-h v" . 'helpful-variable)
    ("C-x C-h k" . 'helpful-key)
    ("C-x C-h c" . 'helpful-command)
-   ("C-c C-d" . 'helpful-at-point)))
+   ("C-c C-d" .   'helpful-at-point)))
 
 (use-package init-vterm
   :ensure nil)

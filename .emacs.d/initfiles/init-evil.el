@@ -76,7 +76,7 @@
     ;; t for terminal
     "t"   'vterm-toggle
     ;; e for editing
-    "e"   'darkroom-tentative-mode
+    "e"   '+org/toggle-edit-focus
     ;; d for dired
     "d"   'treemacs-display-current-project-exclusively
     ;; s for slime

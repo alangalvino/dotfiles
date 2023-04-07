@@ -1,0 +1,10 @@
+(defun +org/toggle-edit-focus ()
+  (interactive)
+  (if (buffer-narrowed-p)
+      (progn
+        (widen)
+        (visual-line-mode -1)
+        (darkroom-tentative-mode -1))
+    (org-narrow-to-subtree)
+    (visual-line-mode t)
+    (darkroom-tentative-mode t)))
