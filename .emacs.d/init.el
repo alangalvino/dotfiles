@@ -65,14 +65,10 @@
   :delight
   :hook
   ('emacs-lisp-mode . #'aggressive-indent-mode)
-  ('org-mode        . #'aggressive-indent-mode)
   ('lisp-mode       . #'aggressive-indent-mode))
 
-(use-package treemacs
-  :ensure t
-  :custom
-  (treemacs-no-png-images t)
-  :delight)
+(use-package init-treemacs
+  :ensure nil)
 
 (use-package darkroom
   :ensure t
@@ -125,8 +121,8 @@
              (evil-collection-unimpaired-mode nil t)
              (evil-unimpaired-mode nil t))))
 
-(use-package init-auto-save
-  :ensure nil)
+;; (use-package init-auto-save
+;;   :ensure nil)
 
 (use-package init-global-keybindings
   :ensure nil)

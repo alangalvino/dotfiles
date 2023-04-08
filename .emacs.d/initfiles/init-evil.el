@@ -73,6 +73,8 @@
     "w"   'helm-find-my-workspace
     ;; g for git
     "g"   'magit-status
+    ;; search recursivelly on project
+    "r"   'helm-projectile-grep
     ;; search word
     "/"   'helm-occur
     ;; t for terminal
@@ -80,7 +82,7 @@
     ;; e for editing
     "e"   '+org/toggle-edit-focus
     ;; d for dired
-    "d"   'treemacs-display-current-project-exclusively
+    "d"   'treemacs-on-current-project-exclusively
     ;; s for slime
     "s"   'slime
     ;; kill buffers
@@ -104,20 +106,13 @@
     (kbd "C-r") 'helm-slime-repl-history
     (kbd "C-m") 'slime-repl-return)
   (evil-collection-define-key 'normal 'org-mode-map
-    "RET"        '+org/dwim-at-point
     [return]     '+org/dwim-at-point
-    "C-S-RET"    '+org/insert-item-above
     [C-S-return] '+org/insert-item-above
-    "C-RET"      '+org/insert-item-below
     [C-return]   '+org/insert-item-below)
   (evil-collection-define-key 'insert 'org-mode-map
-    "RET"         '+org/return
     [return]     '+org/return
-    "S-RET"      '+org/shift-return
     [S-return]   '+org/shift-return
-    "C-S-RET"    '+org/insert-item-above
     [C-S-return] '+org/insert-item-above
-    "C-RET"      '+org/insert-item-below
-    [C-return]   '+org-insert-item-below))
+    [C-return]   '+org/insert-item-below))
 
 (provide 'init-evil)
