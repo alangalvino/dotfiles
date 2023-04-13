@@ -33,7 +33,7 @@
                     ,body))))
 
 (cl-defun +chatgpt/api-call (&key prompt instruction callback)
-  (let* ((prompt-text (if instruction (concat instruction " " prompt) prompt))
+  (let* ((prompt-text (if instruction (concat instruction ": " prompt) prompt))
          (url "https://api.openai.com/v1/chat/completions")
          (headers `(("Content-Type" . "application/json")
                     ("Authorization" . ,(concat "Bearer " chatgpt-api-key))))

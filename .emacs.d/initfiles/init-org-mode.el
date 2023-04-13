@@ -11,6 +11,7 @@
 
   ;; Org hooks
   (add-hook 'org-mode-hook (lambda ()
+                             (company-mode -1)
                              (org-bullets-mode 1)
                              (org-toggle-pretty-entities)
                              (org-display-inline-images)
@@ -24,6 +25,12 @@
    'org-babel-load-languages
    '((lisp . t)
      (shell . t)))
+  
+  (add-hook 'org-insert-heading-hook
+            (lambda ()
+              (save-excursion
+                (org-back-to-heading)
+                (org-set-property "CREATED_AT" (format-time-string "[%Y-%m-%d %T]")))))
 
   (require 'org-tempo))
 

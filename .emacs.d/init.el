@@ -73,6 +73,7 @@
 (use-package darkroom
   :ensure t
   :config
+  (setq darkroom-text-scale-increase 1)
   (setq darkroom-margins 0.02))
 
 (use-package company
@@ -109,7 +110,7 @@
   :ensure nil)
 
 (use-package init-doom-modeline
-  ensure nil)
+  :ensure nil)
 
 (use-package delight
   :ensure t

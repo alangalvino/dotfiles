@@ -2,11 +2,6 @@
 
 ;; (require 'slime)
 
-;; Load Quicklisp
-(if (file-exists-p "~/.roswell/lisp/quicklisp/slime-helper.el")
-    (progn
-      (load (expand-file-name "~/.roswell/lisp/quicklisp/slime-helper.el"))))
-
 ;; Load Slime helpers
 (if (file-exists-p "~/.roswell/helper.el")
     (progn
