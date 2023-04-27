@@ -1,0 +1,23 @@
+* Installing Debian
+:PROPERTIES:
+:CREATED_AT: [2023-04-18 00:04:32]
+:END:
+- Via graphical install
+- English laguage
+- United States location
+- Dvorak key settings
+- Hostname: k8-node-<number>
+- Same password as graybox
+- Username: k8-node
+* Configuring network bridge
+:PROPERTIES:
+:CREATED_AT: [2023-04-18 00:50:59]
+:END:
+- Go to VM network preferences
+- Choose bridge mode
+- Type: br0
+* Configuring VM autostart
+#+begin_src shell
+  virsh list --all
+  virsh autostart <domain-id>
+#+end_src

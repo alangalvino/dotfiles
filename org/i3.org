@@ -1,0 +1,22 @@
+* Installing screenshot app
+:PROPERTIES:
+:CREATED_AT: [2023-04-19 09:20:57]
+:END:
+#+begin_src shell
+  sudo apt install maim
+#+end_src
+* Installing Rofi (dmenu alternative)
+:PROPERTIES:
+:CREATED_AT: [2023-04-19 17:56:47]
+:END:
+#+begin_src shell
+  sudo apt install rofi
+#+end_src
+* Configuring brightness adjustment
+:PROPERTIES:
+:CREATED_AT: [2023-04-19 21:20:16]
+:END:
+#+begin_src shell
+  sudo apt install brightnessctl
+  sudo gpasswd -a @USER video
+#+end_src
