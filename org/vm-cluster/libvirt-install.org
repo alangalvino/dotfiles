@@ -1,0 +1,8 @@
+* Installing libvirt
+#+begin_src shell
+  emerge --ask app-emulation/libvirt
+#+end_src
+* Enabling libvirt on start
+#+begin_src shell
+  rc-service libvirtd start && rc-update add libvirtd default 
+#+end_src

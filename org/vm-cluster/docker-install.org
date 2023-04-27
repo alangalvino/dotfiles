@@ -1,0 +1,9 @@
+* Installing docker
+#+begin_src shell
+  emerge --ask --verbose app-containers/docker app-containers/docker-cli
+
+  rc-update add docker default
+  rc-service docker start
+
+  usermod -aG docker graybox
+#+end_src

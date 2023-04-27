@@ -1,0 +1,302 @@
+* Creating a Gentoo Live-USB 
+** Using a MacOS Enviroment
+- Download Balena Etcher (tool for create a live usb)
+  - https://www.balena.io/etcher
+- Download Gentoo Minimal Installation
+  - https://www.gentoo.org/downloads/
+- Write Gentoo Minimal into an USB stick
+* Booting the Live-USB
+** On MacMini
+- Press the power button
+- After the beep press and hold the Option key
+  - If you're using a mechanical keyboard turn the lights on to see the time the keyboard starts to
+    hold the Option key after it as it can take 1 second or 2.
+* Setting layout to Dvorak
+- As soon as the Gentoo boots choose the dvorak layout (14)
+* Defining password
+Search for graybox on KeePassXC
+#+begin_src passwd
+  shell
+#+end_src
+* Defining user
+Each MacMini will have the name graybox-<number>, example:
+#+begin_src shell
+  useradd -m -G users graybox-2
+
+#+end_src
+* Configuring disk partitions
+#+begin_src shell
+  fdisk /dev/sda
+#+end_src
+
+- p: for listing
+- g: to create a new gpt disklable and remove partitions
+- n: for create a new partition
+- t: to mark the partition scheme
+- w: to apply
+
+- +256M -> Boot
+- +32G -> Swap (2 * 16)
+* Configuring file system (Ext4)
+** FAT32 for EFI
+#+begin_src shell
+  mkfs.vfat -F 32 /dev/sda1
+#+end_src
+** EXT4 for main partition
+#+begin_src shell
+mkfs.ext4 /dev/sda3
+#+end_src
+** Swap
+#+begin_src shell
+  mkswap /dev/sda2
+  swapon /dev/sda2
+#+end_src
+* Mounting root
+#+begin_src shell
+  mkdir --parents /mnt/gentoo
+  mount /dev/sda3 /mnt/gentoo
+  cd /mnt/gentoo
+#+end_src
+* Downloading stage3-amd64-hardened-selinux-openrc
+#+begin_src shell
+  links https://www.gentoo.org/downloads/mirrors/
+#+end_src
+* Unpacking stage3-amd64-hardened-selinux-openrc tar
+#+begin_src shell
+tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner
+#+end_src
+* Adding march=native on Portage make.config file
+#+begin_src shell
+  vi /mnt/gentoo/etc/portage/make.conf
+  # COMMON_FLAGS="-march=native -O2 -pipe"
+#+end_src
+* Coping naming serve configuration before chroot
+#+begin_src shell
+  cp --dereference /etc/resolv.conf /mnt/gentoo/etc/
+#+end_src
+* Mounting the necessary filesystems
+#+begin_src shell
+mount --types proc /proc /mnt/gentoo/proc
+mount --rbind /sys /mnt/gentoo/sys
+mount --make-rslave /mnt/gentoo/sys
+mount --rbind /dev /mnt/gentoo/dev
+mount --make-rslave /mnt/gentoo/dev
+mount --bind /run /mnt/gentoo/run
+mount --make-slave /mnt/gentoo/run
+#+end_src
+* Chrooting on /mnt/gentoo
+#+begin_src shell
+  chroot /mnt/gentoo /bin/bash
+  source /etc/profile
+  export PS1="(chroot) ${PS1}"
+
+#+End_src
+* Mounting /boot partition
+#+begin_src shell
+  mount /dev/sda1 /boot
+#+end_src
+* Updating Portage packages
+#+begin_src shell
+  emerge-webrsync
+#+end_src
+* Selecting eselect profile
+#+begin_src shell
+  eselect profile list
+#+end_src
+* Update the @world set
+#+begin_src shell
+  emerge --ask --verbose --update --deep --newuse @world
+#+end_src
+* Installing vim
+#+begin_src shell
+  emerge --ask app-editors/vim
+#+end_src
+* Install config update helper
+#+begin_src shell
+  emerge --ask app-portage/cfg-update
+#+end_src
+* Configuring CPU Flags
+#+begin_src shell
+  emerge --ask app-portage/cpuid2cpuflags
+  echo "*/* $(cpuid2cpuflags)" > /etc/portage/package.use/00cpu-flags
+#+end_src
+* Configuring timezone
+#+begin_src shell
+  echo "Brazil/East" > /etc/timezone
+  emerge --config sys-libs/timezone-data
+#+end_src
+* Configuring Locale
+#+begin_src shell
+  nano -w /etc/locale.gen
+  # enabling en_US.UTF-8 UTF-8
+  locale-gen
+#+end_src
+* Selecting locale
+#+begin_src shell
+  eselect locale list
+  # eselect locale set <number>
+#+end_src
+* Updating enviroment
+#+begin_src shell
+  env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
+#+end_src
+* Configuring license for linux-firmware and intel
+#+begin_src shell
+  mkdir /etc/portage/package.license
+  vim /etc/portage/package.license/kernel
+  # sys-kernel/linux-firmware @BINARY-REDISTRIBUTABLE
+  # sys-firmware/intel-microcode intel-ucode
+#+end_src
+* Installing linux-firmware
+#+begin_src shell
+  emerge --ask sys-kernel/linux-firmware
+#+end_src
+* Installing microcode for intel
+#+begin_src shell
+ emerge --ask sys-firmware/intel-microcode
+#+end_src
+* Installing distribution kernel
+#+begin_src shell
+  emerge --ask sys-kernel/installkernel-gentoo
+  emerge --ask sys-kernel/gentoo-kernel
+#+end_src
+* Cleaning old packages
+#+begin_src shell
+  emerge --depclean
+#+end_src
+* Installing kernel sources
+#+begin_src shell
+  emerge --ask sys-kernel/gentoo-sources
+  eselect kernel list
+  eselect kernel set 1
+  ls -l /usr/src/linux
+#+end_src
+* Configurings fstab
+** Example of fstab
+#+begin_example
+/dev/sda1   /boot        vfat    defaults,noatime     0 2
+/dev/sda2   none         swap    sw                   0 0
+/dev/sda3   /            ext4    noatime              0 1
+#+end_example
+** Editing fstab
+#+begin_src shell
+  vim /etc/fstab
+#+end_src
+* Setting hostname
+#+begin_src shell
+  # echo graybox-<number> > /etc/hostname
+#+end_src
+* Configuring dhcpd
+#+begin_src shell
+  emerge --ask net-misc/dhcpcd
+  rc-update add dhcpcd default 
+  rc-service dhcpcd start
+#+end_src
+* Configuring root password
+#+begin_src shell
+  passwd
+
+#+end_src
+* Configuring dvorak keymap
+#+begin_src shell
+  vim /etc/conf.d/keymaps
+#+end_src
+* Setting clock to local
+#+begin_src shell
+  vim /etc/conf.d/hwclock
+  # change it to local
+#+end_src
+* Installing log system for rc.d
+#+begin_src shell
+  emerge --ask app-admin/sysklogd
+  rc-update add sysklogd default
+#+end_src
+* Configuring sshd to start at init
+#+begin_src shell
+  rc-update add sshd default
+#+end_src
+* Installing bootloader (GRUB)
+#+begin_src shell
+  echo 'GRUB_PLATFORMS="efi-64"' >> /etc/portage/make.conf
+  emerge --ask sys-boot/os-prober
+  emerge --ask --verbose sys-boot/grub
+
+  grub-install --target=x86_64-efi --efi-directory=/boot
+
+  # edit grub file and add GRUB_DISABLE_OS_PROBER=false
+  vim /etc/default/grub
+
+  grub-mkconfig -o /boot/grub/grub.cfg
+#+end_src
+* Configuring user
+#+begin_src shell
+  useradd -m -G users,wheel,audio -s /bin/bash graybox
+  passwd graybox
+#+end_src
+* Removing tar
+#+begin_src shell
+  rm /stage3-*.tar.*
+#+end_src
+* Permitting root login via ssh
+#+begin_src shell
+  vim /etc/ssh/sshd_config
+  # add PermitRootLogin yes to sshd_conf  
+#+end_src
+
+* Configuring network bridge
+:PROPERTIES:
+:CREATED_AT: [2023-04-17 23:41:35]
+:END:
+** Intro
+To have the VMs on the same network than the hosts.
+** Creating bridge br0
+#+begin_src /etc/conf.d/net
+# Set up the initial layer 2 bridge interface
+bridge_br0="enp3s0f0"
+
+# Bridge dynamic config
+config_br0="dhcp"
+
+bridge_forward_delay_br0=0
+bridge_hello_time_br0=1000
+#+end_src
+** Linking bridge interface, starting it and enabling for auto start on next boot
+:PROPERTIES:
+:CREATED_AT: [2023-04-18 13:44:23]
+:END:
+#+begin_src shell
+  ln -s /etc/init.d/net.lo /etc/init.d/net.br0
+  rc-service net.br0 start
+  rc-update add net.br0 default
+#+end_src
+** Enabling iptable forwarding 
+:PROPERTIES:
+:CREATED_AT: [2023-04-18 13:51:52]
+:END:
+*** Creating iptables script file
+:PROPERTIES:
+:CREATED_AT: [2023-04-18 13:46:29]
+:END:
+#+begin_src ~/firewall
+  #!/bin/bash
+
+  iptables -P FORWARD ACCEPT
+#+end_src
+*** Applying and saving commands
+:PROPERTIES:
+:CREATED_AT: [2023-04-18 13:49:17]
+:END:
+#+begin_src shell
+chmod 744 ~/firewall
+~/firewall
+/etc/init.d/iptables save
+#+end_src
+** Disabling ipv6
+:PROPERTIES:
+:CREATED_AT: [2023-04-18 13:55:42]
+:END:
+#+begin_src /etc/systcl.d/disable_ipv6.conf
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+#+end_src

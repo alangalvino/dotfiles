@@ -1,0 +1,12 @@
+* Baremetal Overview
+- All grayboxes are macminis running a Gentoo
+- All grayboxes are running libvirt
+- graybox-1
+  - user: graybox
+  - ip: 192.168.68.71
+- graybox-2
+  - user: graybox
+  - ip: 192.168.68.75
+- graybox-3
+  - user: graybox
+  - ip: 192.168.68.72
