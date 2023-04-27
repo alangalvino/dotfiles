@@ -27,10 +27,10 @@
          (text (string-trim (assoc-default 'content first-choice-message))))
     text))
 
-(cl-defmacro +chatgpt/with-success-response (body)
+(cl-defmacro +chatgpt/with-success-response (&body body)
   `(cl-function (lambda (&key data &allow-other-keys)
                   (let ((response-text (+chatgpt/parse-response-text data)))
-                    ,body))))
+                    ,@body))))
 
 (cl-defun +chatgpt/api-call (&key prompt instruction callback)
   (let* ((prompt-text (if instruction (concat instruction ": " prompt) prompt))
@@ -41,7 +41,6 @@
                 `(("messages" . [(("role" . "user") ("content" . ,prompt-text))])
                   ("temperature" . 0.5)
                   ("model" . "gpt-3.5-turbo")))))
-    (message data)
     (+chatgpt/message "Running...")
     (request
       url
@@ -79,14 +78,14 @@
       (+chatgpt/message "Region replacement canceled.")))
   (+chatgpt/kill-buffer-widown))
 
-(defun +chatgpt/get-prompt-text ()
+(defun +chatgpt/ask-for-prompt-text ()
   (read-string (+chatgpt/message-string "Send a message: ")))
 
 (defun +chatgpt/get-instruction-text ()
   (read-string (+chatgpt/message-string "Ask for somenthing: ")))
 
 (cl-defmacro +chatgpt/run (&key (user-input-method 'region) (instruction nil) (replace-text nil))
-  `(let* ((text ,(if (eq user-input-method 'region) '(+chatgpt/get-region-text) '(+chatgpt/get-prompt-text))))
+  `(let* ((text ,(if (eq user-input-method 'region) '(+chatgpt/get-region-text) '(+chatgpt/ask-for-prompt-text))))
      (+chatgpt/api-call :prompt text
                         :instruction ,instruction
                         :callback (+chatgpt/with-success-response
