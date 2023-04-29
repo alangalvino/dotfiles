@@ -2,7 +2,7 @@
 - https://forum.endeavouros.com/t/tutorial-easy-setup-endeavour-xfce-i3-tiling-window-manager/13171
 * Toggling panel
 :PROPERTIES:
-:CREATED_AT: [2023-04-24 08:37:07]
+:CREATED_AT: [2023-04-28 18:41:26]
 :END:
 #+begin_src ~/.config/xfce4/bin/toggle-panel
 #!/bin/bash
@@ -12,4 +12,51 @@ if [ `ps aux | grep ' xfce4-panel '|  grep -v grep` ]; then
 else
   xfce4-panel --disable-wm-check
 fi
+#+end_src
+* Fixing xfce-screesaver revealing desktop after lid open
+** Reference
+:PROPERTIES:
+:CREATED_AT: [2023-04-28 20:51:41]
+:END:
+- https://askubuntu.com/questions/1383379/xubuntu-desktop-visible-after-suspend-before-lock-screen 
+** Recompiling xfce-settings without upower-glib
+:PROPERTIES:
+:CREATED_AT: [2023-04-28 20:51:53]
+:END:
+*** Make /opt dir
+:PROPERTIES:
+:CREATED_AT: [2023-04-28 20:52:36]
+:END:
+#+begin_src shell
+  mkdir /opt/xfce-settings
+  cd /opt/xfce-settings
+  chown -R $USER /opt/xfce-settings
+#+end_src
+*** Install dependencies
+:PROPERTIES:
+:CREATED_AT: [2023-04-28 20:55:19]
+:END:
+#+begin_src shell
+  sudo apt-get install build-essential pbuilder
+  sudo apt-get build-dep xfce4-settings
+#+end_src
+*** Clonning source code via apt
+#+begin_src shell
+  apt-get source xfce4-settings
+#+end_src
+*** Remove upower-glib support
+:PROPERTIES:
+:CREATED_AT: [2023-04-28 20:57:12]
+:END:
+Edit the file debian/rules and delete the line that says --enable-upower-glib \. This line normally enables upower-glib support, which we don't want.
+*** Recompile xfce-settings
+:PROPERTIES:
+:CREATED_AT: [2023-04-28 20:59:59]
+:END:
+#+begin_src shell
+  debuild -i -us -uc -b
+#+end_src
+*** Preventing xfce-settings updates
+#+begin_src shell
+ sudo apt-mark hold xfce4-settings
 #+end_src
