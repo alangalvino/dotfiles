@@ -245,7 +245,7 @@ mount --make-slave /mnt/gentoo/run
 
 * Configuring network bridge
 :PROPERTIES:
-:CREATED_AT: [2023-04-17 23:41:35]
+:CREATED_AT: [2023-04-27 14:13:52]
 :END:
 ** Intro
 To have the VMs on the same network than the hosts.
@@ -299,4 +299,13 @@ chmod 744 ~/firewall
 net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
 net.ipv6.conf.lo.disable_ipv6 = 1
+#+end_src
+* Configuring Portage log
+:PROPERTIES:
+:CREATED_AT: [2023-04-27 14:13:59]
+:END:
+#+begin_src /etc/portage/make.conf
+# Portage log to file
+PORTAGE_ELOG_CLASSES="log warn error"
+PORTAGE_ELOG_SYSTEM="echo save"
 #+end_src
