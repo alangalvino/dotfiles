@@ -9,6 +9,7 @@
   (evil-mode t)
   (evil-set-undo-system 'undo-redo)
 
+
   ;; Repeat search with 'S' and 's'
   (define-key evil-normal-state-map "s" 'evil-search-next)
   (define-key evil-normal-state-map "S" 'evil-search-previous)
@@ -43,9 +44,9 @@
   (define-key evil-visual-state-map (kbd "C-y") 'yank)
 
   ;; Ctrl + h as delete backward char
-  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char)
-  (define-key evil-motion-state-map (kbd "C-h") 'evil-delete-backward-char)
-  (define-key evil-visual-state-map (kbd "C-h") 'evil-delete-backward-char)
+  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+  (define-key evil-motion-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+  (define-key evil-visual-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
 
   ;; Find function definition
   (define-key evil-insert-state-map (kbd "M-.") 'xref-find-definitions)
