@@ -1,0 +1,41 @@
+* Left-hand configuration on X11
+:PROPERTIES:
+:CREATED_AT: [2023-05-01 17:43:51]
+:END:
+** Reference
+:PROPERTIES:
+:CREATED_AT: [2023-05-01 17:44:10]
+:END:
+- https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
+** Configuration
+:PROPERTIES:
+:CREATED_AT: [2023-05-01 17:44:20]
+:END:
+*** Dongle
+#+begin_src /usr/share/X11/xorg.conf.d/10-kensington-expert-dongle.conf
+Section "InputClass"
+    Identifier "Kensington Expert Mouse"
+    MatchProduct "Kensington Expert Wireless TB Mouse"
+    MatchIsPointer "on"
+    MatchDevicePath "/dev/input/event*"
+    Driver "libinput"
+    Option "ButtonMapping" "3 8 1 4 5 6 7 2 9"
+    Option "ScrollButton" "2"
+    Option "ScrollMethod" "button"
+    Option "MiddleEmulation" "on"
+EndSection
+#+end_src
+*** Wireless
+#+begin_src /usr/share/X11/xorg.conf.d/10-kensington-expert-wireless.conf
+Section "InputClass"
+    Identifier "Kensington Expert Mouse"
+    MatchProduct "ExpertBT5.0 Mouse"
+    MatchIsPointer "on"
+    MatchDevicePath "/dev/input/event*"
+    Driver "libinput"
+    Option "ButtonMapping" "3 8 1 4 5 6 7 2 9"
+    Option "ScrollButton" "2"
+    Option "ScrollMethod" "button"
+    Option "MiddleEmulation" "on"
+EndSection
+#+end_src
